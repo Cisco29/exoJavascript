@@ -59,6 +59,40 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+// Fonction pour supprimer la classe 'playing' après la fin de la transition
+function removeTransition(e) {
+  // Vérifie si la propriété de la transition est 'transform'
+  if (e.propertyName !== 'transform') return;
+  // Supprime la classe 'playing' de l'élément qui a déclenché la transition
+  e.target.classList.remove('playing');
+}
+
+// Fonction pour jouer le son associé à une touche
+function playSound(e) {
+  // Sélectionne l'élément audio associé à la touche pressée
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  // Sélectionne l'élément div associé à la touche pressée
+  const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+  
+  // Vérifie si l'élément audio existe
+  if (!audio) return;
+
+  // Ajoute la classe 'playing' à l'élément div pour l'effet visuel
+  key.classList.add('playing');
+  
+  // Réinitialise la position de lecture audio à 0 et joue le son
+  audio.currentTime = 0;
+  audio.play();
+}
+
+// Sélectionne tous les éléments avec la classe 'key' et les transforme en un tableau
+const keys = Array.from(document.querySelectorAll('.key'));
+
+// Ajoute un écouteur d'événements de transition à chaque élément avec la classe 'key'
+keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+// Ajoute un écouteur d'événements de touche enfoncée à la fenêtre entière
+window.addEventListener('keydown', playSound);
 
 </script>
 
